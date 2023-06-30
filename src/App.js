@@ -10,7 +10,8 @@ const searchMovies = async (searchTerm) => {
     const response = await axios.get(
       `https://www.omdbapi.com/?apikey=${API_KEY}&s=${searchTerm}`,
     );
-    return response.data.Search || [];
+    const movieResults = response.data.Search || [];
+    return movieResults;
   } catch (error) {
     if (error.response && error.response.status === 401) {
       // Clave de API vencida o no autorizada
@@ -23,12 +24,40 @@ const searchMovies = async (searchTerm) => {
   }
 };
 
+const getMovieDetails = async (title) => {
+  try {
+    const response = await axios.get(
+      `https://www.omdbapi.com/?apikey=${API_KEY}&t=${encodeURIComponent(
+        title,
+      )}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.log('Error:', error.message);
+    return null;
+  }
+};
+
+const updateMovieDetails = async (movies) => {
+  const updatedMovies = await Promise.all(
+    movies.map(async (movie) => {
+      const details = await getMovieDetails(movie.Title);
+      if (details) {
+        return { ...movie, ...details };
+      }
+      return movie;
+    }),
+  );
+  return updatedMovies;
+};
+
 const App = () => {
   const [movies, setMovies] = useState([]);
 
   const handleSearch = async (searchTerm) => {
     const results = await searchMovies(searchTerm);
-    setMovies(results);
+    const moviesWithDetails = await updateMovieDetails(results);
+    setMovies(moviesWithDetails);
   };
 
   return (

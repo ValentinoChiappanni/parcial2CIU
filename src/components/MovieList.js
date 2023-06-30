@@ -11,6 +11,9 @@ const MovieList = ({ movies }) => {
           title={movie.Title}
           year={movie.Year}
           poster={movie.Poster}
+          Runtime={movie.Runtime}
+          Actors={movie.Actors}
+          Plot={movie.Plot}
         />
       ))}
     </div>
