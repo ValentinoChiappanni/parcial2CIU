@@ -1,7 +1,7 @@
 {
-  "name": "repoReact",
+  "name": "parcial2CIU",
   "version": "0.1.0",
-  "homepage": "https://ValentinoChiappanni.github.io/repoReact",
+  "homepage": "https://ValentinoChiappanni.github.io/parcial2CIU",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
