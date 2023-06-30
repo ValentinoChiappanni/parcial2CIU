@@ -3,7 +3,7 @@ import SearchForm from './SearchForm';
 import MovieList from './components/MovieList';
 import axios from 'axios';
 
-const API_KEY = 'dd3d7772';
+const API_KEY = 'dd3d7773';
 
 const searchMovies = async (searchTerm) => {
   try {
