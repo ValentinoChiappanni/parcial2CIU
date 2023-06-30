@@ -1,12 +1,33 @@
-import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useState } from 'react';
+import SearchForm from './SearchForm';
+import MovieList from './components/MovieList';
+import axios from 'axios';
 
-function App() {
+const API_KEY = 'dd3d7773';
+
+const searchMovies = async (searchTerm) => {
+  const response = await axios.get(
+    `https://www.omdbapi.com/?apikey=${API_KEY}&s=${searchTerm}`,
+  );
+  return response.data.Search || [];
+};
+
+const App = () => {
+  const [movies, setMovies] = useState([]);
+
+  const handleSearch = async (searchTerm) => {
+    const results = await searchMovies(searchTerm);
+    setMovies(results);
+  };
+
   return (
-    <div className="text-center">
-      <h1>Repo semilla</h1>
+    <div className="container">
+      <h1 className="mt-4 mb-4">Buscador de películas</h1>
+      <SearchForm onSearch={handleSearch} />
+      <hr />
+      <MovieList movies={movies} />
     </div>
   );
-}
+};
 
 export default App;
