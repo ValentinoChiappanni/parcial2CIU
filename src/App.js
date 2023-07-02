@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SearchForm from './SearchForm';
 import MovieList from './components/MovieList';
+import FavoritesList from './components/FavoritesList';
 import axios from 'axios';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
 
 const API_KEY = 'dd3d7773';
 
@@ -53,6 +56,19 @@ const updateMovieDetails = async (movies) => {
 
 const App = () => {
   const [movies, setMovies] = useState([]);
+  const [favorites, setFavorites] = useState([]);
+  const [showFavorites, setShowFavorites] = useState(false);
+
+  useEffect(() => {
+    const storedFavorites = localStorage.getItem('favorites');
+    if (storedFavorites) {
+      setFavorites(JSON.parse(storedFavorites));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+  }, [favorites]);
 
   const handleSearch = async (searchTerm) => {
     const results = await searchMovies(searchTerm);
@@ -60,12 +76,55 @@ const App = () => {
     setMovies(moviesWithDetails);
   };
 
+  const addToFavorites = (movie) => {
+    setFavorites((prevFavorites) => [...prevFavorites, movie]);
+  };
+
+  const removeFromFavorites = (movie) => {
+    setFavorites((prevFavorites) =>
+      prevFavorites.filter((favMovie) => favMovie.imdbID !== movie.imdbID),
+    );
+  };
+
+  const toggleFavorites = () => {
+    setShowFavorites(!showFavorites);
+  };
+
+  const handleFavoritesClose = () => {
+    setShowFavorites(false);
+  };
+
+  useEffect(() => {
+    const storedMovies = localStorage.getItem('movies');
+    if (storedMovies) {
+      setMovies(JSON.parse(storedMovies));
+    } else {
+      handleSearch(''); // Realiza la búsqueda inicial al cargar la página
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('movies', JSON.stringify(movies));
+  }, [movies]);
+
   return (
     <div className="container">
       <h1 className="mt-4 mb-4">Buscador de películas</h1>
       <SearchForm onSearch={handleSearch} />
       <hr />
-      <MovieList movies={movies} />
+      <MovieList movies={movies} addToFavorites={addToFavorites} />
+      <Button onClick={toggleFavorites}>Lista de películas favoritas</Button>
+      <Modal show={showFavorites} onHide={handleFavoritesClose} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Películas favoritas</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <FavoritesList
+            favorites={favorites}
+            removeFromFavorites={removeFromFavorites}
+          />
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };

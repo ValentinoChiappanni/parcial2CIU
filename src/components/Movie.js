@@ -1,12 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Movie = ({ title, year, poster, Runtime, Actors, Plot }) => {
+const Movie = ({
+  title,
+  year,
+  poster,
+  Runtime,
+  Actors,
+  Plot,
+  addToFavorites,
+}) => {
   return (
     <div className="col-md-4 mb-4">
       <div className="card h-100">
-        {' '}
-        {/* Agrega la clase "h-100" para establecer una altura fija */}
         <img src={poster} alt={title} className="card-img-top" />
         <div className="card-body">
           <h5 className="card-title">{title}</h5>
@@ -22,6 +28,7 @@ const Movie = ({ title, year, poster, Runtime, Actors, Plot }) => {
           <p className="card-text">
             <strong>Sinopsis:</strong> {Plot !== 'N/A' ? Plot : 'N/A'}
           </p>
+          <button onClick={addToFavorites}>Agregar a favoritos</button>
         </div>
       </div>
     </div>
@@ -35,6 +42,7 @@ Movie.propTypes = {
   Runtime: PropTypes.string.isRequired,
   Actors: PropTypes.string.isRequired,
   Plot: PropTypes.string.isRequired,
+  addToFavorites: PropTypes.func.isRequired,
 };
 
 export default Movie;
