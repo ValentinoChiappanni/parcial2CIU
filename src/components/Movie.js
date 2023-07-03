@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
 
 const Movie = ({
   title,
@@ -13,30 +11,28 @@ const Movie = ({
   addToFavorites,
 }) => {
   return (
-    <div className="col-md-4 mb-4">
-      <Card>
-        {poster !== 'N/A' && (
-          <Card.Img variant="top" src={poster} alt={title} />
-        )}
-        <Card.Body>
-          <Card.Title>{title}</Card.Title>
-          <Card.Text>
+    <div className="col-lg-4 col-md-6 mb-4">
+      <div className="card h-100">
+        <img src={poster} className="card-img-top" alt={title} />
+        <div className="card-body d-flex flex-column">
+          <h5 className="card-title">{title}</h5>
+          <p className="card-text">
             <strong>Año:</strong> {year}
-          </Card.Text>
-          <Card.Text>
-            <strong>Tiempo:</strong> {Runtime !== 'N/A' ? `${Runtime} ` : 'N/A'}
-          </Card.Text>
-          <Card.Text>
-            <strong>Actores:</strong> {Actors !== 'N/A' ? Actors : 'N/A'}
-          </Card.Text>
-          <Card.Text>
-            <strong>Sinopsis:</strong> {Plot !== 'N/A' ? Plot : 'N/A'}
-          </Card.Text>
-          <Button variant="primary" onClick={addToFavorites}>
+          </p>
+          <p className="card-text">
+            <strong>Duración:</strong> {Runtime}
+          </p>
+          <p className="card-text">
+            <strong>Actores:</strong> {Actors}
+          </p>
+          <p className="card-text">
+            <strong>Argumento:</strong> {Plot}
+          </p>
+          <button className="btn btn-primary mt-auto" onClick={addToFavorites}>
             Agregar a favoritos
-          </Button>
-        </Card.Body>
-      </Card>
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

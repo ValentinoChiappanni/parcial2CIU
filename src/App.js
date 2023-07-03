@@ -50,13 +50,13 @@ const updateMovieDetails = async (movies) => {
   const updatedMovies = await Promise.all(
     movies.map(async (movie) => {
       const details = await getMovieDetails(movie.Title);
-      if (details) {
+      if (details && details.Poster !== 'N/A') {
         return { ...movie, ...details };
       }
-      return movie;
+      return null;
     }),
   );
-  return updatedMovies;
+  return updatedMovies.filter((movie) => movie !== null);
 };
 
 const App = () => {
