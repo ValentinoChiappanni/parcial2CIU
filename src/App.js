@@ -7,7 +7,7 @@ import axios from 'axios';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 
-const API_KEY = '2907aab6';
+const API_KEY = 'ed02d089';
 
 const searchMovies = async (searchTerm, type, genre) => {
   try {
