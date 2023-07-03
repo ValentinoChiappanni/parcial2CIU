@@ -56,6 +56,7 @@ const updateMovieDetails = async (movies) => {
 
 const App = () => {
   const [movies, setMovies] = useState([]);
+  const [randomMovies, setRandomMovies] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [showFavorites, setShowFavorites] = useState(false);
 
@@ -74,6 +75,16 @@ const App = () => {
     const results = await searchMovies(searchTerm);
     const moviesWithDetails = await updateMovieDetails(results);
     setMovies(moviesWithDetails);
+  };
+
+  const getRandomMovies = async () => {
+    const randomSearchTerm = String.fromCharCode(
+      Math.floor(Math.random() * 26) + 97, // Genera una letra aleatoria en minúscula
+    );
+    const results = await searchMovies(randomSearchTerm);
+    const randomMovieList = results.slice(0, 20);
+    const moviesWithDetails = await updateMovieDetails(randomMovieList);
+    setRandomMovies(moviesWithDetails);
   };
 
   const addToFavorites = (movie) => {
@@ -113,6 +124,7 @@ const App = () => {
       <SearchForm onSearch={handleSearch} />
       <hr />
       <MovieList movies={movies} addToFavorites={addToFavorites} />
+      <Button onClick={getRandomMovies}>Películas aleatorias</Button>
       <Button onClick={toggleFavorites}>Lista de películas favoritas</Button>
       <Modal show={showFavorites} onHide={handleFavoritesClose} centered>
         <Modal.Header closeButton>
@@ -125,6 +137,12 @@ const App = () => {
           />
         </Modal.Body>
       </Modal>
+      {randomMovies.length > 0 && (
+        <div>
+          <h2>Películas aleatorias</h2>
+          <MovieList movies={randomMovies} addToFavorites={addToFavorites} />
+        </div>
+      )}
     </div>
   );
 };
