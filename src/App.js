@@ -165,6 +165,14 @@ const App = () => {
     setFavorites((prevFavorites) =>
       prevFavorites.filter((favMovie) => favMovie.imdbID !== movie.imdbID),
     );
+    setMovies((prevMovies) =>
+      prevMovies.map((prevMovie) => {
+        if (prevMovie.imdbID === movie.imdbID) {
+          return { ...prevMovie, isFavorite: false };
+        }
+        return prevMovie;
+      }),
+    );
   };
 
   const updateComment = (movieId, comment) => {
@@ -204,6 +212,7 @@ const App = () => {
             favorites={favorites}
             removeFromFavorites={removeFromFavorites}
             updateComment={updateComment}
+            updateMovies={setFavorites}
           />
         </Modal.Body>
         <Modal.Footer>
