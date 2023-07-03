@@ -19,11 +19,10 @@ const FavoritesList = ({ favorites, removeFromFavorites, updateComment }) => {
     localStorage.setItem('favoritesData', data);
   }, [ratings, comments]);
 
-  const handleRatingChange = (event, movie) => {
-    const { value } = event.target;
+  const handleRatingChange = (movieId, rating) => {
     setRatings((prevRatings) => ({
       ...prevRatings,
-      [movie.imdbID]: value,
+      [movieId]: rating,
     }));
   };
 
@@ -54,18 +53,21 @@ const FavoritesList = ({ favorites, removeFromFavorites, updateComment }) => {
                 <div>
                   <h3>{movie.Title}</h3>
                   <p>Calificación:</p>
-                  <select
-                    className="form-control"
-                    value={ratings[movie.imdbID] || ''}
-                    onChange={(event) => handleRatingChange(event, movie)}
-                  >
-                    <option value="">Seleccione una calificación</option>
-                    <option value="1">1 estrella</option>
-                    <option value="2">2 estrellas</option>
-                    <option value="3">3 estrellas</option>
-                    <option value="4">4 estrellas</option>
-                    <option value="5">5 estrellas</option>
-                  </select>
+                  <div>
+                    {[1, 2, 3, 4, 5].map((rating) => (
+                      <span
+                        key={rating}
+                        onClick={() => handleRatingChange(movie.imdbID, rating)}
+                        style={{
+                          cursor: 'pointer',
+                          color:
+                            rating <= ratings[movie.imdbID] ? 'gold' : 'gray',
+                        }}
+                      >
+                        ☆
+                      </span>
+                    ))}
+                  </div>
                   <p>Comentario:</p>
                   <textarea
                     className="form-control"
