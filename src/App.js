@@ -6,7 +6,7 @@ import axios from 'axios';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 
-const API_KEY = 'dd3d7773';
+const API_KEY = 'b41c8716';
 
 const searchMovies = async (searchTerm, type, genre) => {
   try {
@@ -22,10 +22,8 @@ const searchMovies = async (searchTerm, type, genre) => {
     return movieResults;
   } catch (error) {
     if (error.response && error.response.status === 401) {
-      // Clave de API vencida o no autorizada
       return [{ Title: 'Clave de API vencida' }];
     } else {
-      // Otro error de solicitud
       console.log('Error:', error.message);
       return [];
     }
@@ -59,15 +57,42 @@ const updateMovieDetails = async (movies) => {
   return updatedMovies.filter((movie) => movie !== null);
 };
 
+const generateRandomPhrases = async (setMovies) => {
+  const phrases = [];
+
+  for (let i = 0; i < 50; i++) {
+    let phrase = '';
+    let vowelCount = 0;
+    for (let j = 0; j < 4; j++) {
+      const randomCharCode = Math.floor(Math.random() * 26) + 97;
+      const char = String.fromCharCode(randomCharCode);
+      phrase += char;
+      if (char.match(/[aeio]/)) {
+        vowelCount++;
+      }
+    }
+    if (vowelCount >= 2) {
+      phrases.push(phrase);
+    }
+  }
+
+  for (const phrase of phrases) {
+    const results = await searchMovies(phrase);
+    setMovies((prevMovies) => [...prevMovies, ...results]);
+  }
+};
+
 const App = () => {
   const [movies, setMovies] = useState([]);
-  const [randomMovies, setRandomMovies] = useState([]);
-  const [searchedMovies, setSearchedMovies] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [showFavorites, setShowFavorites] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [type, setType] = useState('');
   const [genre, setGenre] = useState('');
+
+  useEffect(() => {
+    generateRandomPhrases(setMovies);
+  }, []);
 
   useEffect(() => {
     const storedFavorites = localStorage.getItem('favorites');
@@ -86,7 +111,8 @@ const App = () => {
     setGenre(selectedGenre);
 
     if (searchTerm.trim() === '') {
-      getRandomMovies(); // Obtener películas aleatorias
+      setMovies([]);
+      generateRandomPhrases(setMovies);
     } else {
       const results = await searchMovies(
         searchTerm,
@@ -98,24 +124,8 @@ const App = () => {
         (movie, index, self) =>
           index === self.findIndex((m) => m.imdbID === movie.imdbID),
       );
-      setSearchedMovies(filteredMovies);
+      setMovies(filteredMovies);
     }
-  };
-
-  const getRandomMovies = async () => {
-    if (!searchTerm) {
-      const randomSearchTerm = String.fromCharCode(
-        Math.floor(Math.random() * 26) + 97,
-      );
-      setSearchTerm(randomSearchTerm);
-    }
-    const randomResults = await searchMovies(searchTerm);
-    const randomMoviesWithDetails = await updateMovieDetails(randomResults);
-    const filteredRandomMovies = randomMoviesWithDetails.filter(
-      (movie, index, self) =>
-        index === self.findIndex((m) => m.imdbID === movie.imdbID),
-    );
-    setRandomMovies(filteredRandomMovies);
   };
 
   const addToFavorites = (movie) => {
@@ -150,21 +160,11 @@ const App = () => {
         </Button>
       </div>
 
-      {searchedMovies.length > 0 && (
-        <MovieList
-          movies={searchedMovies}
-          favorites={favorites}
-          addToFavorites={addToFavorites}
-        />
-      )}
-
-      {randomMovies.length > 0 && (
-        <MovieList
-          movies={randomMovies}
-          favorites={favorites}
-          addToFavorites={addToFavorites}
-        />
-      )}
+      <MovieList
+        movies={movies}
+        favorites={favorites}
+        addToFavorites={addToFavorites}
+      />
 
       <Modal show={showFavorites} onHide={() => setShowFavorites(false)}>
         <Modal.Header closeButton>
@@ -175,7 +175,6 @@ const App = () => {
             favorites={favorites}
             removeFromFavorites={removeFromFavorites}
             updateComment={updateComment}
-            updateMovies={setSearchedMovies}
           />
         </Modal.Body>
         <Modal.Footer>
