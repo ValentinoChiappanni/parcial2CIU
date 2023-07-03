@@ -94,7 +94,11 @@ const App = () => {
         selectedGenre,
       );
       const moviesWithDetails = await updateMovieDetails(results);
-      setSearchedMovies(moviesWithDetails);
+      const filteredMovies = moviesWithDetails.filter(
+        (movie, index, self) =>
+          index === self.findIndex((m) => m.imdbID === movie.imdbID),
+      );
+      setSearchedMovies(filteredMovies);
     }
   };
 
