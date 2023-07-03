@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import SearchForm from './SearchForm';
 import MovieList from './components/MovieList';
@@ -67,7 +68,6 @@ const App = () => {
   const [showFavorites, setShowFavorites] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [type, setType] = useState('');
-  const [genre, setGenre] = useState('');
 
   useEffect(() => {
     const storedFavorites = localStorage.getItem('favorites');
@@ -83,7 +83,6 @@ const App = () => {
   const handleSearch = async (searchTerm, selectedType, selectedGenre) => {
     setSearchTerm(searchTerm);
     setType(selectedType);
-    setGenre(selectedGenre);
 
     if (searchTerm.trim() === '') {
       getRandomMovies(); // Obtener películas aleatorias
