@@ -7,7 +7,7 @@ const FavoritesList = ({ favorites, removeFromFavorites }) => {
   const [opinions, setOpinions] = useState({});
 
   useEffect(() => {
-    // Recuperar las calificaciones y opiniones almacenadas al cargar la página
+    // Recuperar las calificaciones y opiniones almacenadas al cargar la págin
     const storedRatings = localStorage.getItem('ratings');
     const storedOpinions = localStorage.getItem('opinions');
     if (storedRatings) {
