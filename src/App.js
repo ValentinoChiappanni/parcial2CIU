@@ -6,7 +6,7 @@ import axios from 'axios';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 
-const API_KEY = '6263112f';
+const API_KEY = '94a5e75f';
 
 const searchMovies = async (searchTerm, type, genre) => {
   try {
@@ -60,9 +60,9 @@ const updateMovieDetails = async (movies) => {
 };
 
 const generateRandomPhrases = async (setMovies) => {
-  const phrases = [];
+  const phrases = ['ali', 'tas', 'tar'];
 
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 25; i++) {
     let phrase = '';
     let vowelCount = 0;
     for (let j = 0; j < 4; j++) {
@@ -78,8 +78,26 @@ const generateRandomPhrases = async (setMovies) => {
     }
   }
 
+  const shuffle = (array) => {
+    let currentIndex = array.length;
+    let temporaryValue, randomIndex;
+
+    while (currentIndex !== 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+
+    return array;
+  };
+
+  const shuffledPhrases = shuffle(phrases);
+
   const results = await Promise.all(
-    phrases.map(async (phrase) => {
+    shuffledPhrases.map(async (phrase) => {
       const movies = await searchMovies(phrase);
       return updateMovieDetails(movies);
     }),
