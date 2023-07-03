@@ -78,14 +78,19 @@ const generateRandomPhrases = async (setMovies) => {
     }
   }
 
-  for (const phrase of phrases) {
-    const results = await searchMovies(phrase);
-    const moviesWithDetails = await updateMovieDetails(results);
-    const filteredMovies = moviesWithDetails.filter(
-      (movie) => movie.Poster !== 'N/A',
-    );
-    setMovies((prevMovies) => [...prevMovies, ...filteredMovies]);
-  }
+  const results = await Promise.all(
+    phrases.map(async (phrase) => {
+      const movies = await searchMovies(phrase);
+      return updateMovieDetails(movies);
+    }),
+  );
+
+  const flattenedResults = results.flat();
+  const filteredMovies = flattenedResults.filter(
+    (movie) => movie.Poster !== 'N/A',
+  );
+
+  setMovies(filteredMovies);
 };
 
 const App = () => {
