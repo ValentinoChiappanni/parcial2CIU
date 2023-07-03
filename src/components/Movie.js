@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
 
 const Movie = ({
   title,
@@ -12,25 +14,29 @@ const Movie = ({
 }) => {
   return (
     <div className="col-md-4 mb-4">
-      <div className="card h-100">
-        <img src={poster} alt={title} className="card-img-top" />
-        <div className="card-body">
-          <h5 className="card-title">{title}</h5>
-          <p className="card-text">
+      <Card>
+        {poster !== 'N/A' && (
+          <Card.Img variant="top" src={poster} alt={title} />
+        )}
+        <Card.Body>
+          <Card.Title>{title}</Card.Title>
+          <Card.Text>
             <strong>Año:</strong> {year}
-          </p>
-          <p className="card-text">
+          </Card.Text>
+          <Card.Text>
             <strong>Tiempo:</strong> {Runtime !== 'N/A' ? `${Runtime} ` : 'N/A'}
-          </p>
-          <p className="card-text">
+          </Card.Text>
+          <Card.Text>
             <strong>Actores:</strong> {Actors !== 'N/A' ? Actors : 'N/A'}
-          </p>
-          <p className="card-text">
+          </Card.Text>
+          <Card.Text>
             <strong>Sinopsis:</strong> {Plot !== 'N/A' ? Plot : 'N/A'}
-          </p>
-          <button onClick={addToFavorites}>Agregar a favoritos</button>
-        </div>
-      </div>
+          </Card.Text>
+          <Button variant="primary" onClick={addToFavorites}>
+            Agregar a favoritos
+          </Button>
+        </Card.Body>
+      </Card>
     </div>
   );
 };
