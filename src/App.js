@@ -62,7 +62,7 @@ const updateMovieDetails = async (movies) => {
 const generateRandomPhrases = async (setMovies) => {
   const phrases = [];
 
-  for (let i = 0; i < 40; i++) {
+  for (let i = 0; i < 70; i++) {
     let phrase = '';
     let vowelCount = 0;
     for (let j = 0; j < 4; j++) {
