@@ -54,7 +54,9 @@ const updateMovieDetails = async (movies) => {
       return null;
     }),
   );
-  return updatedMovies.filter((movie) => movie !== null);
+  return updatedMovies.filter(
+    (movie) => movie !== null && movie.Poster !== 'N/A',
+  );
 };
 
 const generateRandomPhrases = async (setMovies) => {
@@ -78,7 +80,11 @@ const generateRandomPhrases = async (setMovies) => {
 
   for (const phrase of phrases) {
     const results = await searchMovies(phrase);
-    setMovies((prevMovies) => [...prevMovies, ...results]);
+    const moviesWithDetails = await updateMovieDetails(results);
+    const filteredMovies = moviesWithDetails.filter(
+      (movie) => movie.Poster !== 'N/A',
+    );
+    setMovies((prevMovies) => [...prevMovies, ...filteredMovies]);
   }
 };
 
