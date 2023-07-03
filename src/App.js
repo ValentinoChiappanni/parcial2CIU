@@ -7,7 +7,7 @@ import axios from 'axios';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 
-const API_KEY = 'ed02d089';
+const API_KEY = '15595326';
 
 const searchMovies = async (searchTerm, type, genre) => {
   try {
@@ -126,6 +126,8 @@ const App = () => {
     const storedFavorites = localStorage.getItem('favorites');
     if (storedFavorites) {
       setFavorites(JSON.parse(storedFavorites));
+    } else {
+      setFavorites([]);
     }
   }, []);
 
