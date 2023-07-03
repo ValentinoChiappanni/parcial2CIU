@@ -8,10 +8,10 @@ import Button from 'react-bootstrap/Button';
 
 const API_KEY = 'dd3d7773';
 
-const searchMovies = async (searchTerm) => {
+const searchMovies = async (searchTerm, type, genre) => {
   try {
     const response = await axios.get(
-      `https://www.omdbapi.com/?apikey=${API_KEY}&s=${searchTerm}`,
+      `https://www.omdbapi.com/?apikey=${API_KEY}&s=${searchTerm}&type=${type}&genre=${genre}`,
     );
     const movieResults = response.data.Search || [];
     return movieResults;
@@ -57,8 +57,12 @@ const updateMovieDetails = async (movies) => {
 const App = () => {
   const [movies, setMovies] = useState([]);
   const [randomMovies, setRandomMovies] = useState([]);
+  const [searchedMovies, setSearchedMovies] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [showFavorites, setShowFavorites] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [type, setType] = useState('');
+  const [genre, setGenre] = useState('');
 
   useEffect(() => {
     const storedFavorites = localStorage.getItem('favorites');
@@ -71,20 +75,27 @@ const App = () => {
     localStorage.setItem('favorites', JSON.stringify(favorites));
   }, [favorites]);
 
-  const handleSearch = async (searchTerm) => {
-    const results = await searchMovies(searchTerm);
+  const handleSearch = async (searchTerm, selectedType, selectedGenre) => {
+    setSearchTerm(searchTerm);
+    setType(selectedType);
+    setGenre(selectedGenre);
+    const results = await searchMovies(searchTerm, selectedType, selectedGenre);
     const moviesWithDetails = await updateMovieDetails(results);
-    setMovies(moviesWithDetails);
+    setSearchedMovies(moviesWithDetails);
   };
 
   const getRandomMovies = async () => {
-    const randomSearchTerm = String.fromCharCode(
-      Math.floor(Math.random() * 26) + 97, // Genera una letra aleatoria en minúscula
-    );
-    const results = await searchMovies(randomSearchTerm);
-    const randomMovieList = results.slice(0, 20);
-    const moviesWithDetails = await updateMovieDetails(randomMovieList);
-    setRandomMovies(moviesWithDetails);
+    if (!searchTerm) {
+      const randomSearchTerm = String.fromCharCode(
+        Math.floor(Math.random() * 26) + 97, // Genera una letra aleatoria en minúscula
+      );
+      const results = await searchMovies(randomSearchTerm, '', '');
+      const randomMovieList = results.slice(0, 20);
+      const moviesWithDetails = await updateMovieDetails(randomMovieList);
+      setRandomMovies(moviesWithDetails);
+    } else {
+      setRandomMovies([]);
+    }
   };
 
   const addToFavorites = (movie) => {
@@ -110,7 +121,7 @@ const App = () => {
     if (storedMovies) {
       setMovies(JSON.parse(storedMovies));
     } else {
-      handleSearch(''); // Realiza la búsqueda inicial al cargar la página
+      handleSearch('', '', ''); // Realiza la búsqueda inicial al cargar la página
     }
 
     getRandomMovies(); // Obtener películas aleatorias al cargar la página
@@ -125,7 +136,11 @@ const App = () => {
       <h1 className="mt-4 mb-4">Buscador de películas</h1>
       <SearchForm onSearch={handleSearch} />
       <hr />
-      <MovieList movies={movies} addToFavorites={addToFavorites} />
+      {searchTerm ? (
+        <MovieList movies={searchedMovies} addToFavorites={addToFavorites} />
+      ) : (
+        <MovieList movies={randomMovies} addToFavorites={addToFavorites} />
+      )}
       <Button onClick={toggleFavorites}>Lista de películas favoritas</Button>
       <Modal show={showFavorites} onHide={handleFavoritesClose} centered>
         <Modal.Header closeButton>
@@ -138,12 +153,6 @@ const App = () => {
           />
         </Modal.Body>
       </Modal>
-      {randomMovies.length > 0 && (
-        <div>
-          <h2>Películas aleatorias</h2>
-          <MovieList movies={randomMovies} addToFavorites={addToFavorites} />
-        </div>
-      )}
     </div>
   );
 };
