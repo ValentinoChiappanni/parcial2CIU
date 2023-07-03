@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import SearchForm from './SearchForm';
 import MovieList from './components/MovieList';
@@ -6,7 +7,7 @@ import axios from 'axios';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 
-const API_KEY = 'b0409d70';
+const API_KEY = '2907aab6';
 
 const searchMovies = async (searchTerm, type, genre) => {
   try {
@@ -68,12 +69,11 @@ const generateRandomPhrases = async (setMovies) => {
       const randomCharCode = Math.floor(Math.random() * 26) + 97;
       const char = String.fromCharCode(randomCharCode);
       phrase += char;
-      
     }
-   
-      phrases.push(phrase);
-    
-    console.log(phrases)
+
+    phrases.push(phrase);
+
+    console.log(phrases);
   }
 
   const shuffle = (array) => {
@@ -113,6 +113,7 @@ const App = () => {
   const [movies, setMovies] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [showFavorites, setShowFavorites] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [searchTerm, setSearchTerm] = useState('');
   const [type, setType] = useState('');
   const [genre, setGenre] = useState('');
