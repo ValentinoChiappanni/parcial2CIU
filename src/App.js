@@ -108,9 +108,11 @@ const App = () => {
         Math.floor(Math.random() * 26) + 97,
       );
       const results = await searchMovies(randomSearchTerm, '', '');
-      const randomMovieList = results.slice(0, 10);
+      const randomMovieList = results.slice(0, 20);
       const moviesWithDetails = await updateMovieDetails(randomMovieList);
       setRandomMovies(moviesWithDetails);
+    } else {
+      setRandomMovies([]);
     }
   };
 
@@ -124,69 +126,48 @@ const App = () => {
     );
   };
 
-  const updateComment = (movie, comment) => {
-    setFavorites((prevFavorites) => {
-      const updatedFavorites = [...prevFavorites];
-      const index = updatedFavorites.findIndex(
-        (favMovie) => favMovie.imdbID === movie.imdbID,
-      );
-      if (index !== -1) {
-        updatedFavorites[index].comment = comment;
-      }
-      return updatedFavorites;
-    });
+  const toggleFavorites = () => {
+    setShowFavorites(!showFavorites);
   };
 
+  const handleFavoritesClose = () => {
+    setShowFavorites(false);
+  };
+
+  useEffect(() => {
+    const storedMovies = localStorage.getItem('movies');
+    if (storedMovies) {
+      setMovies(JSON.parse(storedMovies));
+    } else {
+      handleSearch('', '', '');
+    }
+
+    getRandomMovies();
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('movies', JSON.stringify(movies));
+  }, [movies]);
+
   return (
-    <div className="container mt-4">
-      <h1 className="text-center mb-4">Buscador de películas</h1>
+    <div className="container">
+      <h1 className="mt-4 mb-4">Buscador de películas</h1>
       <SearchForm onSearch={handleSearch} />
-      {randomMovies.length > 0 && (
-        <div className="mb-4">
-          <h2>Películas aleatorias</h2>
-          <MovieList movies={randomMovies} onAddToFavorites={addToFavorites} />
-        </div>
+      <hr />
+      {searchTerm ? (
+        <MovieList movies={searchedMovies} addToFavorites={addToFavorites} />
+      ) : (
+        <MovieList movies={randomMovies} addToFavorites={addToFavorites} />
       )}
-      {searchedMovies.length > 0 && (
-        <div className="mb-4">
-          <h2>Resultados de búsqueda</h2>
-          <MovieList
-            movies={searchedMovies}
-            onAddToFavorites={addToFavorites}
-          />
-        </div>
-      )}
-      {favorites.length > 0 && (
-        <div className="mb-4">
-          <Button
-            variant="primary"
-            onClick={() => setShowFavorites(!showFavorites)}
-          >
-            {showFavorites ? 'Ocultar favoritos' : 'Mostrar favoritos'}
-          </Button>
-          {showFavorites && (
-            <FavoritesList
-              favorites={favorites}
-              removeFromFavorites={removeFromFavorites}
-              updateComment={updateComment}
-            />
-          )}
-        </div>
-      )}
-      <Modal
-        show={showFavorites}
-        onHide={() => setShowFavorites(false)}
-        size="lg"
-        centered
-      >
+      <Button onClick={toggleFavorites}>Lista de películas favoritas</Button>
+      <Modal show={showFavorites} onHide={handleFavoritesClose} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Lista de favoritos</Modal.Title>
+          <Modal.Title>Películas favoritas</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <FavoritesList
             favorites={favorites}
             removeFromFavorites={removeFromFavorites}
-            updateComment={updateComment}
           />
         </Modal.Body>
       </Modal>
