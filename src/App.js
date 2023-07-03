@@ -62,14 +62,14 @@ const updateMovieDetails = async (movies) => {
 const generateRandomPhrases = async (setMovies) => {
   const phrases = [];
 
-  for (let i = 0; i < 50; i++) {
+  for (let i = 0; i < 40; i++) {
     let phrase = '';
     let vowelCount = 0;
     for (let j = 0; j < 4; j++) {
       const randomCharCode = Math.floor(Math.random() * 26) + 97;
       const char = String.fromCharCode(randomCharCode);
       phrase += char;
-      if (char.match(/[aeio]/)) {
+      if (char.match(/[aeo]/)) {
         vowelCount++;
       }
     }
