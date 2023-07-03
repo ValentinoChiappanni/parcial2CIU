@@ -1,26 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-const FavoritesList = ({ favorites }) => {
+const FavoritesList = ({ favorites, removeFromFavorites, updateComment }) => {
   const [ratings, setRatings] = useState({});
+  const [comments, setComments] = useState({});
 
   useEffect(() => {
-    // Recuperar las calificaciones almacenadas al cargar la página
-    const storedRatings = localStorage.getItem('ratings');
-    if (storedRatings) {
-      setRatings(JSON.parse(storedRatings));
+    const storedData = localStorage.getItem('favoritesData');
+    if (storedData) {
+      const { ratings, comments } = JSON.parse(storedData);
+      setRatings(ratings);
+      setComments(comments);
     }
   }, []);
 
   useEffect(() => {
-    // Guardar las calificaciones en localStorage al actualizarlas
-    localStorage.setItem('ratings', JSON.stringify(ratings));
-  }, [ratings]);
+    const data = JSON.stringify({ ratings, comments });
+    localStorage.setItem('favoritesData', data);
+  }, [ratings, comments]);
 
   const handleRatingChange = (event, movie) => {
     const { value } = event.target;
     setRatings((prevRatings) => ({
       ...prevRatings,
+      [movie.imdbID]: value,
+    }));
+  };
+
+  const handleCommentChange = (event, movie) => {
+    const { value } = event.target;
+    setComments((prevComments) => ({
+      ...prevComments,
       [movie.imdbID]: value,
     }));
   };
@@ -56,6 +66,18 @@ const FavoritesList = ({ favorites }) => {
                     <option value="4">4 estrellas</option>
                     <option value="5">5 estrellas</option>
                   </select>
+                  <p>Comentario:</p>
+                  <textarea
+                    className="form-control"
+                    value={comments[movie.imdbID] || ''}
+                    onChange={(event) => handleCommentChange(event, movie)}
+                  />
+                  <button
+                    className="btn btn-danger mt-2"
+                    onClick={() => removeFromFavorites(movie)}
+                  >
+                    Eliminar de favoritos
+                  </button>
                 </div>
               </div>
             </li>
@@ -78,6 +100,8 @@ FavoritesList.propTypes = {
       Plot: PropTypes.string.isRequired,
     }),
   ).isRequired,
+  removeFromFavorites: PropTypes.func.isRequired,
+  updateComment: PropTypes.func.isRequired,
 };
 
 export default FavoritesList;
