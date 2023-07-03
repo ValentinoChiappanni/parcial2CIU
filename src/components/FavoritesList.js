@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import Button from 'react-bootstrap/Button';
 
-const FavoritesList = ({ favorites }) => {
+const FavoritesList = ({ favorites, removeFromFavorites }) => {
   const [ratings, setRatings] = useState({});
+  const [opinions, setOpinions] = useState({});
 
   useEffect(() => {
-    // Recuperar las calificaciones almacenadas al cargar la página
+    // Recuperar las calificaciones y opiniones almacenadas al cargar la página
     const storedRatings = localStorage.getItem('ratings');
+    const storedOpinions = localStorage.getItem('opinions');
     if (storedRatings) {
       setRatings(JSON.parse(storedRatings));
+    }
+    if (storedOpinions) {
+      setOpinions(JSON.parse(storedOpinions));
     }
   }, []);
 
@@ -17,12 +23,34 @@ const FavoritesList = ({ favorites }) => {
     localStorage.setItem('ratings', JSON.stringify(ratings));
   }, [ratings]);
 
-  const handleRatingChange = (event, movie) => {
-    const { value } = event.target;
+  useEffect(() => {
+    // Guardar las opiniones en localStorage al actualizarlas
+    localStorage.setItem('opinions', JSON.stringify(opinions));
+  }, [opinions]);
+
+  const handleRatingChange = (rating, movie) => {
     setRatings((prevRatings) => ({
       ...prevRatings,
+      [movie.imdbID]: rating,
+    }));
+  };
+
+  const handleOpinionChange = (event, movie) => {
+    const { value } = event.target;
+    setOpinions((prevOpinions) => ({
+      ...prevOpinions,
       [movie.imdbID]: value,
     }));
+  };
+
+  const handleRemoveClick = (movie) => {
+    removeFromFavorites(movie);
+  };
+
+  const renderStarRating = (rating) => {
+    const starCount = parseInt(rating);
+    const stars = '✰'.repeat(starCount);
+    return stars;
   };
 
   return (
@@ -44,18 +72,35 @@ const FavoritesList = ({ favorites }) => {
                 <div>
                   <h3>{movie.Title}</h3>
                   <p>Calificación:</p>
-                  <select
+                  <div>
+                    {[1, 2, 3, 4, 5].map((value) => (
+                      <button
+                        key={value}
+                        className={`star-button ${
+                          value <= ratings[movie.imdbID] ? 'selected' : ''
+                        }`}
+                        onClick={() => handleRatingChange(value, movie)}
+                      >
+                        ✰
+                      </button>
+                    ))}
+                  </div>
+                  <p>Opinión:</p>
+                  <textarea
                     className="form-control"
-                    value={ratings[movie.imdbID] || ''}
-                    onChange={(event) => handleRatingChange(event, movie)}
+                    value={opinions[movie.imdbID] || ''}
+                    onChange={(event) => handleOpinionChange(event, movie)}
+                  />
+                  <Button
+                    variant="danger"
+                    onClick={() => handleRemoveClick(movie)}
                   >
-                    <option value="">Seleccione una calificación</option>
-                    <option value="1">1 estrella</option>
-                    <option value="2">2 estrellas</option>
-                    <option value="3">3 estrellas</option>
-                    <option value="4">4 estrellas</option>
-                    <option value="5">5 estrellas</option>
-                  </select>
+                    Eliminar de favoritos
+                  </Button>
+                  <p>
+                    Calificación:{' '}
+                    {renderStarRating(ratings[movie.imdbID] || '0')}
+                  </p>
                 </div>
               </div>
             </li>
@@ -78,6 +123,7 @@ FavoritesList.propTypes = {
       Plot: PropTypes.string.isRequired,
     }),
   ).isRequired,
+  removeFromFavorites: PropTypes.func.isRequired,
 };
 
 export default FavoritesList;
