@@ -10,9 +10,14 @@ const API_KEY = 'dd3d7773';
 
 const searchMovies = async (searchTerm, type, genre) => {
   try {
-    const response = await axios.get(
-      `https://www.omdbapi.com/?apikey=${API_KEY}&s=${searchTerm}&type=${type}&genre=${genre}`,
-    );
+    let url = `https://www.omdbapi.com/?apikey=${API_KEY}&s=${searchTerm}`;
+    if (type) {
+      url += `&type=${type}`;
+    }
+    if (genre) {
+      url += `&genre=${genre}`;
+    }
+    const response = await axios.get(url);
     const movieResults = response.data.Search || [];
     return movieResults;
   } catch (error) {
@@ -79,15 +84,24 @@ const App = () => {
     setSearchTerm(searchTerm);
     setType(selectedType);
     setGenre(selectedGenre);
-    const results = await searchMovies(searchTerm, selectedType, selectedGenre);
-    const moviesWithDetails = await updateMovieDetails(results);
-    setSearchedMovies(moviesWithDetails);
+
+    if (searchTerm.trim() === '') {
+      getRandomMovies(); // Obtener películas aleatorias
+    } else {
+      const results = await searchMovies(
+        searchTerm,
+        selectedType,
+        selectedGenre,
+      );
+      const moviesWithDetails = await updateMovieDetails(results);
+      setSearchedMovies(moviesWithDetails);
+    }
   };
 
   const getRandomMovies = async () => {
     if (!searchTerm) {
       const randomSearchTerm = String.fromCharCode(
-        Math.floor(Math.random() * 26) + 97, // Genera una letra aleatoria en minúscula
+        Math.floor(Math.random() * 26) + 97,
       );
       const results = await searchMovies(randomSearchTerm, '', '');
       const randomMovieList = results.slice(0, 20);
@@ -121,10 +135,10 @@ const App = () => {
     if (storedMovies) {
       setMovies(JSON.parse(storedMovies));
     } else {
-      handleSearch('', '', ''); // Realiza la búsqueda inicial al cargar la página
+      handleSearch('', '', '');
     }
 
-    getRandomMovies(); // Obtener películas aleatorias al cargar la página
+    getRandomMovies();
   }, []);
 
   useEffect(() => {
