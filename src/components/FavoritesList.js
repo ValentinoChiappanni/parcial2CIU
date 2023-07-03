@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-const FavoritesList = ({ favorites, removeFromFavorites, updateComment }) => {
+const FavoritesList = ({
+  favorites,
+  removeFromFavorites,
+  updateComment,
+  updateMovies,
+}) => {
   const [ratings, setRatings] = useState({});
   const [comments, setComments] = useState({});
 
@@ -32,6 +37,13 @@ const FavoritesList = ({ favorites, removeFromFavorites, updateComment }) => {
       ...prevComments,
       [movie.imdbID]: value,
     }));
+  };
+
+  const handleRemoveFromFavorites = (movie) => {
+    removeFromFavorites(movie);
+    updateMovies(
+      favorites.filter((favMovie) => favMovie.imdbID !== movie.imdbID),
+    );
   };
 
   return (
@@ -76,7 +88,7 @@ const FavoritesList = ({ favorites, removeFromFavorites, updateComment }) => {
                   />
                   <button
                     className="btn btn-danger mt-2"
-                    onClick={() => removeFromFavorites(movie)}
+                    onClick={() => handleRemoveFromFavorites(movie)}
                   >
                     Eliminar de favoritos
                   </button>
@@ -104,6 +116,7 @@ FavoritesList.propTypes = {
   ).isRequired,
   removeFromFavorites: PropTypes.func.isRequired,
   updateComment: PropTypes.func.isRequired,
+  updateMovies: PropTypes.func.isRequired,
 };
 
 export default FavoritesList;
