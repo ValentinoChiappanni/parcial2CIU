@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
-import SearchForm from './SearchForm';
 import MovieList from './components/MovieList';
+import SearchForm from './SearchForm';
 import FavoritesList from './components/FavoritesList';
 import axios from 'axios';
 import Modal from 'react-bootstrap/Modal';
