@@ -112,6 +112,8 @@ const App = () => {
     } else {
       handleSearch(''); // Realiza la búsqueda inicial al cargar la página
     }
+
+    getRandomMovies(); // Obtener películas aleatorias al cargar la página
   }, []);
 
   useEffect(() => {
@@ -124,7 +126,6 @@ const App = () => {
       <SearchForm onSearch={handleSearch} />
       <hr />
       <MovieList movies={movies} addToFavorites={addToFavorites} />
-      <Button onClick={getRandomMovies}>Películas aleatorias</Button>
       <Button onClick={toggleFavorites}>Lista de películas favoritas</Button>
       <Modal show={showFavorites} onHide={handleFavoritesClose} centered>
         <Modal.Header closeButton>
