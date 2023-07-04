@@ -113,14 +113,27 @@ const App = () => {
   const [movies, setMovies] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [showFavorites, setShowFavorites] = useState(false);
-  // eslint-disable-next-line no-unused-vars
   const [searchTerm, setSearchTerm] = useState('');
   const [type, setType] = useState('');
   const [genre, setGenre] = useState('');
 
   useEffect(() => {
-    generateRandomPhrases(setMovies);
-  }, []);
+    if (searchTerm.trim() === '') {
+      generateRandomPhrases(setMovies);
+    } else {
+      const searchMoviesData = async () => {
+        const results = await searchMovies(searchTerm, type, genre);
+        const moviesWithDetails = await updateMovieDetails(results);
+        const filteredMovies = moviesWithDetails.filter(
+          (movie, index, self) =>
+            index === self.findIndex((m) => m.imdbID === movie.imdbID),
+        );
+        setMovies(filteredMovies);
+      };
+
+      searchMoviesData();
+    }
+  }, [searchTerm, type, genre]);
 
   useEffect(() => {
     const storedFavorites = localStorage.getItem('favorites');
@@ -135,27 +148,10 @@ const App = () => {
     localStorage.setItem('favorites', JSON.stringify(favorites));
   }, [favorites]);
 
-  const handleSearch = async (searchTerm, selectedType, selectedGenre) => {
+  const handleSearch = (searchTerm, selectedType, selectedGenre) => {
     setSearchTerm(searchTerm);
     setType(selectedType);
     setGenre(selectedGenre);
-
-    if (searchTerm.trim() === '') {
-      setMovies([]);
-      generateRandomPhrases(setMovies);
-    } else {
-      const results = await searchMovies(
-        searchTerm,
-        selectedType,
-        selectedGenre,
-      );
-      const moviesWithDetails = await updateMovieDetails(results);
-      const filteredMovies = moviesWithDetails.filter(
-        (movie, index, self) =>
-          index === self.findIndex((m) => m.imdbID === movie.imdbID),
-      );
-      setMovies(filteredMovies);
-    }
   };
 
   const addToFavorites = (movie) => {
