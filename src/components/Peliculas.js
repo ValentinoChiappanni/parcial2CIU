@@ -7,8 +7,9 @@ import axios from 'axios';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import NavigationBar from './BarraNavegacion';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-const API_KEY = '594071c8';
+const API_KEY = 'eab049f1';
 
 const searchMovies = async (searchTerm, type, genre) => {
   try {
@@ -119,7 +120,12 @@ const Peliculas = () => {
   const [genre, setGenre] = useState('');
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
+  console.log(showSuccessMessage);
+
   const { searchTermParam, typeParam, genreParam } = useParams();
+  const hideSuccessMessage = () => {
+    setShowSuccessMessage(false);
+  };
 
   useEffect(() => {
     if (searchTermParam) {
@@ -164,36 +170,11 @@ const Peliculas = () => {
     localStorage.setItem('favorites', JSON.stringify(favorites));
   }, [favorites]);
 
-  useEffect(() => {
-    let timer;
-    if (showSuccessMessage) {
-      timer = setTimeout(() => {
-        setShowSuccessMessage(false);
-      }, 3000); // Mostrar el mensaje durante 3 segundos
-    }
-    return () => clearTimeout(timer);
-  }, [showSuccessMessage]);
-
   const handleSearch = (searchTerm, selectedType, selectedGenre) => {
     setSearchTerm(searchTerm);
     setType(selectedType);
     setGenre(selectedGenre);
   };
-
-  const addToFavorites = (movie) => {
-    setFavorites((prevFavorites) => [...prevFavorites, movie]);
-    setShowSuccessMessage(true); // Agregar esta línea para mostrar el mensaje de éxito
-  };
-
-  useEffect(() => {
-    let timer;
-    if (showSuccessMessage) {
-      timer = setTimeout(() => {
-        setShowSuccessMessage(false);
-      }, 3000); // Mostrar el mensaje durante 3 segundos
-    }
-    return () => clearTimeout(timer);
-  }, [showSuccessMessage]);
 
   const removeFromFavorites = (movie) => {
     setFavorites((prevFavorites) =>
@@ -220,6 +201,12 @@ const Peliculas = () => {
     );
   };
 
+  const addToFavorites = (movie) => {
+    setFavorites((prevFavorites) => [...prevFavorites, movie]);
+    setShowSuccessMessage(true);
+    setTimeout(hideSuccessMessage, 3000); // Oculta el mensaje después de 3 segundos
+  };
+
   return (
     <div className="container py-4">
       <NavigationBar />
@@ -239,8 +226,11 @@ const Peliculas = () => {
       />
 
       {showSuccessMessage && (
-        <div className="alert alert-success mt-3" role="alert">
-          Película guardada en favoritos.
+        <div className="position-fixed top-0 end-0 p-3">
+          <div className="alert alert-success" role="alert">
+            <h4 className="alert-heading">¡Éxito!</h4>
+            <p>Película guardada en favoritos.</p>
+          </div>
         </div>
       )}
 
@@ -261,11 +251,6 @@ const Peliculas = () => {
             Cerrar
           </Button>
         </Modal.Footer>
-        {showSuccessMessage && (
-          <div className="alert alert-success mt-3" role="alert">
-            Película guardada en favoritos.
-          </div>
-        )}
       </Modal>
     </div>
   );
