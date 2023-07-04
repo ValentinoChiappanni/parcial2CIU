@@ -117,6 +117,7 @@ const Peliculas = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [type, setType] = useState('');
   const [genre, setGenre] = useState('');
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   const { searchTermParam, typeParam, genreParam } = useParams();
 
@@ -163,6 +164,16 @@ const Peliculas = () => {
     localStorage.setItem('favorites', JSON.stringify(favorites));
   }, [favorites]);
 
+  useEffect(() => {
+    let timer;
+    if (showSuccessMessage) {
+      timer = setTimeout(() => {
+        setShowSuccessMessage(false);
+      }, 3000); // Mostrar el mensaje durante 3 segundos
+    }
+    return () => clearTimeout(timer);
+  }, [showSuccessMessage]);
+
   const handleSearch = (searchTerm, selectedType, selectedGenre) => {
     setSearchTerm(searchTerm);
     setType(selectedType);
@@ -171,7 +182,18 @@ const Peliculas = () => {
 
   const addToFavorites = (movie) => {
     setFavorites((prevFavorites) => [...prevFavorites, movie]);
+    setShowSuccessMessage(true); // Agregar esta línea para mostrar el mensaje de éxito
   };
+
+  useEffect(() => {
+    let timer;
+    if (showSuccessMessage) {
+      timer = setTimeout(() => {
+        setShowSuccessMessage(false);
+      }, 3000); // Mostrar el mensaje durante 3 segundos
+    }
+    return () => clearTimeout(timer);
+  }, [showSuccessMessage]);
 
   const removeFromFavorites = (movie) => {
     setFavorites((prevFavorites) =>
@@ -216,6 +238,12 @@ const Peliculas = () => {
         addToFavorites={addToFavorites}
       />
 
+      {showSuccessMessage && (
+        <div className="alert alert-success mt-3" role="alert">
+          Película guardada en favoritos.
+        </div>
+      )}
+
       <Modal show={showFavorites} onHide={() => setShowFavorites(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Lista de favoritos</Modal.Title>
@@ -233,6 +261,11 @@ const Peliculas = () => {
             Cerrar
           </Button>
         </Modal.Footer>
+        {showSuccessMessage && (
+          <div className="alert alert-success mt-3" role="alert">
+            Película guardada en favoritos.
+          </div>
+        )}
       </Modal>
     </div>
   );
