@@ -1,9 +1,9 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Peliculas from './components/Peliculas';
 import QuienesSomos from './components/QuienesSomos';
 
-function App() {
+const App = () => {
   return (
     <>
       <Routes>
@@ -12,6 +12,6 @@ function App() {
       </Routes>
     </>
   );
-}
+};
 
 export default App;
