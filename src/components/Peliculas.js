@@ -8,7 +8,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import NavigationBar from './BarraNavegacion';
 
-const API_KEY = '6f122435';
+const API_KEY = '594071c8';
 
 const searchMovies = async (searchTerm, type, genre) => {
   try {
