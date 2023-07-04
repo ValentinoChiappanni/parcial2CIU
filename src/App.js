@@ -8,7 +8,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/parcial2CIU" element={<Peliculas />} />
-        <Route path="/parcial2CIU/quienesSomos" element={<QuienesSomos />} />
+        <Route path="/parcial2CIU/QuienesSomos" element={<QuienesSomos />} />
       </Routes>
     </Router>
   );

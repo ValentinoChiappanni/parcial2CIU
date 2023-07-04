@@ -27,7 +27,7 @@ const NavigationBar = () => {
               </a>
             </li>
             <li className="nav-item active">
-              <a className="nav-link text" href="/parcial2CIU/quienesSomos">
+              <a className="nav-link text" href="/parcial2CIU/QuienesSomos/">
                 <b className="text">Quienes somos</b>{' '}
                 <span className="sr-only"></span>
               </a>
