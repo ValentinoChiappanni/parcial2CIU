@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import Peliculas from './components/Peliculas';
 import QuienesSomos from './components/QuienesSomos';
+import './App.css';
 function App() {
   return (
     <>

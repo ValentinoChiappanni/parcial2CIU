@@ -9,7 +9,7 @@ import Button from 'react-bootstrap/Button';
 import NavigationBar from './BarraNavegacion';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const API_KEY = 'eab049f1';
+const API_KEY = 'b4cd82c4';
 
 const searchMovies = async (searchTerm, type, genre) => {
   try {
@@ -208,7 +208,7 @@ const Peliculas = () => {
   };
 
   return (
-    <div className="container py-4">
+    <div className="container py-4 ">
       <NavigationBar />
       <h1>Buscador de películas</h1>
       <SearchForm onSearch={handleSearch} />

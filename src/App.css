@@ -37,3 +37,18 @@
     transform: rotate(360deg);
   }
 }
+
+body {
+  background-color: black;
+  color: white;
+}
+
+.card {
+  border-color: rgb(0, 255, 0);
+  border-radius: 1rem;
+  border-width: 3px;
+}
+
+.card-body {
+  background-color: rgb(105 101 101 / 13%);
+}
