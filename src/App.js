@@ -8,6 +8,7 @@ function App() {
       <Routes>
         <Route path="/parcial2CIU" element={<Peliculas />} />
         <Route path="/parcial2CIU/QuienesSomos" element={<QuienesSomos />} />
+        <Route path="*" element={<Peliculas />} />
       </Routes>
     </>
   );
