@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import logo from '../asset/logo.png';
 import '../estilo.css';
+import { NavLink } from 'react-router-dom';
 
 const NavigationBar = () => {
   return (
@@ -22,15 +23,10 @@ const NavigationBar = () => {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto ">
             <li className="nav-item active">
-              <a className="nav-link text" href="/parcial2CIU">
-                <b className="text">Inicio</b> <span className="sr-only"></span>
-              </a>
+              <NavLink to="/parcial2CIU">Inicio</NavLink>
             </li>
             <li className="nav-item active">
-              <a className="nav-link text" href="/parcial2CIU/QuienesSomos/">
-                <b className="text">Quienes somos</b>{' '}
-                <span className="sr-only"></span>
-              </a>
+              <NavLink to="/parcial2CIU/QuienesSomos">Quienes Somos</NavLink>
             </li>
           </ul>
         </div>
