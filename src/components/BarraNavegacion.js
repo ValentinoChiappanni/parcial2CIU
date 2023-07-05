@@ -21,7 +21,7 @@ const NavigationBar = () => {
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span className="navbar-toggler-icon"></span>
+          <span className="navbar-toggler-icon custom-icon"></span>
         </button>
 
         {/* Contenedor del menú desplegable */}
