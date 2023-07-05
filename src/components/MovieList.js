@@ -5,6 +5,7 @@ import Movie from './Movie';
 const MovieList = ({ movies, addToFavorites }) => {
   return (
     <div className="row">
+      {/* Mapea cada película y crea un componente Movie para cada una */}
       {movies.map((movie) => (
         <Movie
           key={movie.imdbID}
@@ -21,6 +22,7 @@ const MovieList = ({ movies, addToFavorites }) => {
   );
 };
 
+// Propiedades requeridas para el componente MovieList
 MovieList.propTypes = {
   movies: PropTypes.arrayOf(
     PropTypes.shape({
