@@ -55,7 +55,7 @@ const FavoritesList = ({
 
   return (
     <div>
-      <h2 className="mb-4">Lista de favoritos</h2>
+      <h2 className="mb-4 text-black">Lista de favoritos</h2>
       {favorites.length === 0 ? (
         <p>No hay películas en la lista de favoritos.</p>
       ) : (

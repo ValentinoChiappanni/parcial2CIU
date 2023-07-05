@@ -124,14 +124,29 @@ const generateRandomPhrases = async (setMovies) => {
 
 const Peliculas = () => {
   const [movies, setMovies] = useState([]); // Estado para almacenar las películas encontradas
-  const [favorites, setFavorites] = useState([]); // Estado para almacenar las películas favoritas
   const [showFavorites, setShowFavorites] = useState(false); // Estado para controlar la visualización de la lista de favoritos
   const [searchTerm, setSearchTerm] = useState(''); // Estado para almacenar el término de búsqueda
   const [type, setType] = useState(''); // Estado para almacenar el tipo de película
   const [genre, setGenre] = useState(''); // Estado para almacenar el género de película
   const [showSuccessMessage, setShowSuccessMessage] = useState(false); // Estado para controlar la visualización del mensaje de éxito
 
-  console.log(showSuccessMessage);
+  let favorites = JSON.parse(localStorage.getItem('favorites'));
+  if (!favorites) {
+    favorites = [];
+  }
+
+  // Generar un hook de estado vacío con las diferentes peliculas favoritas.
+  const [favoriteMovies, setFavorites] = useState(favorites);
+
+  // Hook useEffect: Sirve para ejecutar alguna funcionalidad cuando hay un cambio
+  // en alguna variable/hook/situación
+  useEffect(() => {
+    if (favoriteMovies) {
+      localStorage.setItem('favorites', JSON.stringify(favoriteMovies));
+    } else {
+      localStorage.setItem('favorites', JSON.stringify([]));
+    }
+  }, [favoriteMovies]);
 
   // Obtener los parámetros de la URL utilizando useParams de react-router-dom
   const { searchTermParam, typeParam, genreParam } = useParams();
@@ -174,21 +189,6 @@ const Peliculas = () => {
       searchMoviesData();
     }
   }, [searchTerm, type, genre]);
-
-  // Cargar las películas favoritas desde el almacenamiento local al cargar el componente
-  useEffect(() => {
-    const storedFavorites = localStorage.getItem('favorites');
-    if (storedFavorites) {
-      setFavorites(JSON.parse(storedFavorites));
-    } else {
-      setFavorites([]);
-    }
-  }, []);
-
-  // Guardar las películas favoritas en el almacenamiento local cuando se actualiza la lista de favoritos
-  useEffect(() => {
-    localStorage.setItem('favorites', JSON.stringify(favorites));
-  }, [favorites]);
 
   // Manejar la búsqueda de películas
   const handleSearch = (searchTerm, selectedType, selectedGenre) => {
@@ -259,9 +259,7 @@ const Peliculas = () => {
       )}
 
       <Modal show={showFavorites} onHide={() => setShowFavorites(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Lista de favoritos</Modal.Title>
-        </Modal.Header>
+        <Modal.Header closeButton></Modal.Header>
         <Modal.Body>
           <FavoritesList
             favorites={favorites}
