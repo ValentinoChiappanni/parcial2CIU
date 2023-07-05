@@ -253,7 +253,16 @@ const Peliculas = () => {
           Ver favoritos
         </Button>
       </div>
-
+      {movies.length === 0 && (
+        <div className="text-center">
+          <h2>Cargando películas...</h2>
+          <span
+            className="spinner-border"
+            role="status"
+            aria-hidden="true"
+          ></span>
+        </div>
+      )}
       <MovieList
         movies={movies}
         favorites={favorites}
