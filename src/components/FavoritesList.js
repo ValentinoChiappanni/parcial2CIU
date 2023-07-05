@@ -89,7 +89,7 @@ const FavoritesList = ({
                       </span>
                     ))}
                   </div>
-                  <p>Comentario:</p>
+                  <p>Deja un comentario de que te parecio:</p>
                   {/* Muestra el campo de texto para el comentario */}
                   <textarea
                     className="form-control"

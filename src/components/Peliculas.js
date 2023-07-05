@@ -10,7 +10,7 @@ import NavigationBar from './BarraNavegacion';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 // Clave de la API de OMDB
-const API_KEY = 'b4cd82c4';
+const API_KEY = 'ce645d93';
 
 // Función para buscar películas
 const searchMovies = async (searchTerm, type, genre) => {
@@ -226,9 +226,20 @@ const Peliculas = () => {
 
   // Agregar una película a la lista de favoritos
   const addToFavorites = (movie) => {
-    setFavorites((prevFavorites) => [...prevFavorites, movie]);
-    setShowSuccessMessage(true);
-    setTimeout(hideSuccessMessage, 3000); // Oculta el mensaje después de 3 segundos
+    // Verificar si la película ya está en la lista de favoritos
+    const isAlreadyFavorite = favoriteMovies.some(
+      (favMovie) => favMovie.imdbID === movie.imdbID,
+    );
+
+    if (isAlreadyFavorite) {
+      // Si la película ya está en la lista de favoritos, mostrar una alerta o realizar alguna acción
+      console.log('La película ya está en la lista de favoritos.');
+    } else {
+      // Si la película no está en la lista de favoritos, agregarla
+      setFavorites((prevFavorites) => [...prevFavorites, movie]);
+      setShowSuccessMessage(true);
+      setTimeout(hideSuccessMessage, 3000); // Oculta el mensaje después de 3 segundos
+    }
   };
 
   return (
