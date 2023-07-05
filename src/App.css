@@ -50,6 +50,11 @@ body {
   border-color: rgb(0, 255, 0);
   border-radius: 1rem;
   border-width: 3px;
+  transition: border-color 0.5s;
+}
+
+.card:hover {
+  border-color: rgb(255, 0, 0);
 }
 
 .card-body {
