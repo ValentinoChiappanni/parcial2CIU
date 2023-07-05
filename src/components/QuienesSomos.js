@@ -5,14 +5,19 @@ import NavigationBar from './BarraNavegacion';
 const QuienesSomos = () => {
   return (
     <div className="container">
+      {/* Renderiza la barra de navegación */}
       <NavigationBar />
+      {/* Título de la página */}
       <h1 className="mt-4 text-center">Quiénes Somos</h1>
       <div className="row">
         <div className="col-md-6">
+          {/* Imagen del logo de la empresa */}
           <img src={imagen} alt="Logo de la empresa" className="img-fluid" />
         </div>
         <div className="col-md-6">
+          {/* Título */}
           <h3 className="mt-3">Somos CineMágico</h3>
+          {/* Párrafos con información sobre la empresa */}
           <p>
             En CineMágico, nos apasiona el mundo del cine y estamos dedicados a
             brindar experiencias cinematográficas inolvidables a nuestro

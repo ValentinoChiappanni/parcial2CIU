@@ -9,8 +9,10 @@ import Button from 'react-bootstrap/Button';
 import NavigationBar from './BarraNavegacion';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+// Clave de la API de OMDB
 const API_KEY = 'b4cd82c4';
 
+// Función para buscar películas
 const searchMovies = async (searchTerm, type, genre) => {
   try {
     let url = `https://www.omdbapi.com/?apikey=${API_KEY}&s=${searchTerm}`;
@@ -24,6 +26,7 @@ const searchMovies = async (searchTerm, type, genre) => {
     const movieResults = response.data.Search || [];
     return movieResults;
   } catch (error) {
+    // Manejo de errores de solicitud
     if (error.response && error.response.status === 401) {
       return [{ Title: 'Clave de API vencida' }];
     } else {
@@ -33,6 +36,7 @@ const searchMovies = async (searchTerm, type, genre) => {
   }
 };
 
+// Función para obtener detalles de una película
 const getMovieDetails = async (title) => {
   try {
     const response = await axios.get(
@@ -47,6 +51,7 @@ const getMovieDetails = async (title) => {
   }
 };
 
+// Función para actualizar los detalles de las películas
 const updateMovieDetails = async (movies) => {
   const updatedMovies = await Promise.all(
     movies.map(async (movie) => {
@@ -62,9 +67,11 @@ const updateMovieDetails = async (movies) => {
   );
 };
 
+// Función para generar frases aleatorias y buscar películas basadas en ellas
 const generateRandomPhrases = async (setMovies) => {
   const phrases = [];
 
+  // Generar 9 frases aleatorias
   for (let i = 0; i < 9; i++) {
     let phrase = '';
     for (let j = 0; j < 3; j++) {
@@ -78,6 +85,7 @@ const generateRandomPhrases = async (setMovies) => {
     console.log(phrases);
   }
 
+  // Función para mezclar aleatoriamente un array
   const shuffle = (array) => {
     let currentIndex = array.length;
     let temporaryValue, randomIndex;
@@ -94,8 +102,10 @@ const generateRandomPhrases = async (setMovies) => {
     return array;
   };
 
+  // Mezclar las frases aleatorias generadas
   const shuffledPhrases = shuffle(phrases);
 
+  // Realizar búsqueda de películas para cada frase
   const results = await Promise.all(
     shuffledPhrases.map(async (phrase) => {
       const movies = await searchMovies(phrase);
@@ -103,6 +113,7 @@ const generateRandomPhrases = async (setMovies) => {
     }),
   );
 
+  // Aplanar los resultados y filtrar las películas sin póster
   const flattenedResults = results.flat();
   const filteredMovies = flattenedResults.filter(
     (movie) => movie.Poster !== 'N/A',
@@ -112,21 +123,25 @@ const generateRandomPhrases = async (setMovies) => {
 };
 
 const Peliculas = () => {
-  const [movies, setMovies] = useState([]);
-  const [favorites, setFavorites] = useState([]);
-  const [showFavorites, setShowFavorites] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [type, setType] = useState('');
-  const [genre, setGenre] = useState('');
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [movies, setMovies] = useState([]); // Estado para almacenar las películas encontradas
+  const [favorites, setFavorites] = useState([]); // Estado para almacenar las películas favoritas
+  const [showFavorites, setShowFavorites] = useState(false); // Estado para controlar la visualización de la lista de favoritos
+  const [searchTerm, setSearchTerm] = useState(''); // Estado para almacenar el término de búsqueda
+  const [type, setType] = useState(''); // Estado para almacenar el tipo de película
+  const [genre, setGenre] = useState(''); // Estado para almacenar el género de película
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false); // Estado para controlar la visualización del mensaje de éxito
 
   console.log(showSuccessMessage);
 
+  // Obtener los parámetros de la URL utilizando useParams de react-router-dom
   const { searchTermParam, typeParam, genreParam } = useParams();
+
+  // Función para ocultar el mensaje de éxito
   const hideSuccessMessage = () => {
     setShowSuccessMessage(false);
   };
 
+  // Actualizar los estados searchTerm, type y genre cuando se modifican los parámetros de la URL
   useEffect(() => {
     if (searchTermParam) {
       setSearchTerm(searchTermParam);
@@ -139,10 +154,13 @@ const Peliculas = () => {
     }
   }, [searchTermParam, typeParam, genreParam]);
 
+  // Realizar la búsqueda de películas al cargar el componente o al cambiar el término de búsqueda, el tipo o el género
   useEffect(() => {
     if (searchTerm.trim() === '') {
+      // Si el término de búsqueda está vacío, generar frases aleatorias y buscar películas
       generateRandomPhrases(setMovies);
     } else {
+      // Realizar la búsqueda de películas basada en el término, tipo y género especificados
       const searchMoviesData = async () => {
         const results = await searchMovies(searchTerm, type, genre);
         const moviesWithDetails = await updateMovieDetails(results);
@@ -157,6 +175,7 @@ const Peliculas = () => {
     }
   }, [searchTerm, type, genre]);
 
+  // Cargar las películas favoritas desde el almacenamiento local al cargar el componente
   useEffect(() => {
     const storedFavorites = localStorage.getItem('favorites');
     if (storedFavorites) {
@@ -166,16 +185,19 @@ const Peliculas = () => {
     }
   }, []);
 
+  // Guardar las películas favoritas en el almacenamiento local cuando se actualiza la lista de favoritos
   useEffect(() => {
     localStorage.setItem('favorites', JSON.stringify(favorites));
   }, [favorites]);
 
+  // Manejar la búsqueda de películas
   const handleSearch = (searchTerm, selectedType, selectedGenre) => {
     setSearchTerm(searchTerm);
     setType(selectedType);
     setGenre(selectedGenre);
   };
 
+  // Eliminar una película de la lista de favoritos
   const removeFromFavorites = (movie) => {
     setFavorites((prevFavorites) =>
       prevFavorites.filter((favMovie) => favMovie.imdbID !== movie.imdbID),
@@ -190,6 +212,7 @@ const Peliculas = () => {
     );
   };
 
+  // Actualizar el comentario de una película favorita
   const updateComment = (movieId, comment) => {
     setFavorites((prevFavorites) =>
       prevFavorites.map((favMovie) => {
@@ -201,6 +224,7 @@ const Peliculas = () => {
     );
   };
 
+  // Agregar una película a la lista de favoritos
   const addToFavorites = (movie) => {
     setFavorites((prevFavorites) => [...prevFavorites, movie]);
     setShowSuccessMessage(true);
@@ -208,7 +232,7 @@ const Peliculas = () => {
   };
 
   return (
-    <div className="container py-4 ">
+    <div className="container py-4">
       <NavigationBar />
       <h1>Buscador de películas</h1>
       <SearchForm onSearch={handleSearch} />
