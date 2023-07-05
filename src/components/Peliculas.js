@@ -10,7 +10,7 @@ import NavigationBar from './BarraNavegacion';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 // Clave de la API de OMDB
-const API_KEY = 'ce645d93';
+const API_KEY = '3a4f71c7';
 
 // Función para buscar películas
 const searchMovies = async (searchTerm, type, genre) => {
