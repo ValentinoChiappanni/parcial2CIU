@@ -60,3 +60,7 @@ body {
 .card-body {
   background-color: rgb(105 101 101 / 13%);
 }
+
+.gato {
+  width: 50%;
+}

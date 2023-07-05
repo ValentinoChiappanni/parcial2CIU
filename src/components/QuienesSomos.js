@@ -1,6 +1,7 @@
 import React from 'react';
 import imagen from '../asset/logo.png';
 import NavigationBar from './BarraNavegacion';
+import Footer from './Footer';
 
 const QuienesSomos = () => {
   return (
@@ -68,6 +69,7 @@ const QuienesSomos = () => {
           </p>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

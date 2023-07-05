@@ -8,6 +8,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import NavigationBar from './BarraNavegacion';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Footer from './Footer';
 
 // Clave de la API de OMDB
 const API_KEY = '3a4f71c7';
@@ -294,6 +295,8 @@ const Peliculas = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+
+      <Footer />
     </div>
   );
 };
