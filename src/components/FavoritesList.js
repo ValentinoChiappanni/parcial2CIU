@@ -7,28 +7,36 @@ const FavoritesList = ({
   updateComment,
   updateMovies,
 }) => {
-  // Estado local para almacenar las calificaciones de las películas favoritas
-  const [ratings, setRatings] = useState({});
-  // Estado local para almacenar los comentarios de las películas favoritas
-  const [comments, setComments] = useState({});
+  let puntajeData = JSON.parse(localStorage.getItem('puntajeData'));
+  if (!puntajeData) {
+    puntajeData = [];
+  }
+  let comentarioData = JSON.parse(localStorage.getItem('comentarioData'));
+  if (!comentarioData) {
+    comentarioData = [];
+  }
 
-  // Al cargar el componente, se intenta obtener los datos almacenados en el localStorage
+  // Generar un hook de estado vacío con las diferentes peliculas favoritas.
+  const [ratings, setRatings] = useState(puntajeData);
+  const [comments, setComments] = useState(comentarioData);
+
+  // Hook useEffect: Sirve para ejecutar alguna funcionalidad cuando hay un cambio
+  // en alguna variable/hook/situación
   useEffect(() => {
-    const storedData = localStorage.getItem('favoritesData');
-    if (storedData) {
-      const { ratings, comments } = JSON.parse(storedData);
-      setRatings(ratings);
-      setComments(comments);
+    if (ratings) {
+      localStorage.setItem('puntajeData', JSON.stringify(ratings));
+    } else {
+      localStorage.setItem('puntajeData', JSON.stringify([]));
     }
-  }, []);
-
-  // Al actualizar los estados de ratings y comments, se guardan los datos en el localStorage
+  }, [ratings]);
   useEffect(() => {
-    const data = JSON.stringify({ ratings, comments });
-    localStorage.setItem('favoritesData', data);
-  }, [ratings, comments]);
+    if (comments) {
+      localStorage.setItem('comentarioData', JSON.stringify(comments));
+    } else {
+      localStorage.setItem('comentarioData', JSON.stringify([]));
+    }
+  }, [comments]);
 
-  // Maneja el cambio de calificación de una película
   const handleRatingChange = (movieId, rating) => {
     setRatings((prevRatings) => ({
       ...prevRatings,
@@ -36,7 +44,6 @@ const FavoritesList = ({
     }));
   };
 
-  // Maneja el cambio de comentario de una película
   const handleCommentChange = (event, movie) => {
     const { value } = event.target;
     setComments((prevComments) => ({
@@ -45,14 +52,12 @@ const FavoritesList = ({
     }));
   };
 
-  // Maneja la eliminación de una película de la lista de favoritos
   const handleRemoveFromFavorites = (movie) => {
     removeFromFavorites(movie);
     updateMovies(
       favorites.filter((favMovie) => favMovie.imdbID !== movie.imdbID),
     );
   };
-
   return (
     <div>
       <h2 className="mb-4 text-black">Lista de favoritos</h2>
