@@ -8,7 +8,7 @@
   text-align: center;
   color: white;
 }
+
 .custom-icon {
-  background-color: transparent;
-  border-color: white;
+  filter: sepia(3) saturate(40) hue-rotate(214deg) brightness(2);
 }
