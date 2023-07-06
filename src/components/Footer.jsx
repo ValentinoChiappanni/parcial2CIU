@@ -17,6 +17,14 @@ const Footer = () => {
     }));
   };
 
+  const handleEnviar = (e) => {
+    e.preventDefault();
+    const { nombre, apellido, email, opinion } = formData;
+    const mailtoLink = `mailto:valentino.chiappanni@estudiantes.unahur.edu.ar
+    ?subject=Opinión&body=Nombre: ${nombre}%0D%0AApellido: ${apellido}%0D%0ACorreo electrónico: ${email}%0D%0AOpinión: ${opinion}`;
+    window.location.href = mailtoLink;
+  };
+
   return (
     <footer className="footer bg-dark text-white">
       <div className="container">
@@ -30,7 +38,7 @@ const Footer = () => {
           </div>
           <div className="col-md-6">
             <h5>Deja tu opinión</h5>
-            <form>
+            <form onSubmit={handleEnviar}>
               <div className="form-group">
                 <label htmlFor="nombre">Nombre:</label>
                 <input
