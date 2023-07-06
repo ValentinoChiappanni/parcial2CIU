@@ -14,26 +14,26 @@ const Movie = ({
     <div className="col-lg-4 col-md-6 mb-4">
       <div className="card h-100">
         {/* Imagen de la película */}
-        <img src={poster} className="card-img-top" alt={title} />
+        <img src={poster} className="card-img-top " alt={title} />
         <div className="card-body d-flex flex-column">
           {/* Título de la película */}
-          <h5 className="card-title">{title}</h5>
+          <h2 className="card-title">{title}</h2>
           {/* Año de lanzamiento */}
-          <p className="card-text">
+          <h5 className="card-text">
             <strong>Año:</strong> {year}
-          </p>
+          </h5>
           {/* Duración */}
-          <p className="card-text">
+          <h5 className="card-text">
             <strong>Duración:</strong> {Runtime}
-          </p>
+          </h5>
           {/* Actores */}
-          <p className="card-text">
+          <h5 className="card-text">
             <strong>Actores:</strong> {Actors}
-          </p>
+          </h5>
           {/* Argumento */}
-          <p className="card-text">
+          <h5 className="card-text">
             <strong>Argumento:</strong> {Plot}
-          </p>
+          </h5>
           {/* Botón para agregar a favoritos */}
           <button className="btn btn-primary mt-auto" onClick={addToFavorites}>
             Agregar a favoritos
