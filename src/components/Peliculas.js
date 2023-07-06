@@ -11,7 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Footer from './Footer';
 
 // Clave de la API de OMDB
-const API_KEY = 'dc008ae8';
+const API_KEY = 'eddb8254';
 
 // Función para buscar películas
 const searchMovies = async (searchTerm, type, genre) => {
