@@ -283,7 +283,7 @@ const Peliculas = () => {
         <Modal.Header closeButton></Modal.Header>
         <Modal.Body>
           <FavoritesList
-            favorites={favorites}
+            favorites={favoriteMovies}
             removeFromFavorites={removeFromFavorites}
             updateComment={updateComment}
             updateMovies={setFavorites}
