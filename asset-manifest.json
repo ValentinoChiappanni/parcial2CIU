@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/parcial2CIU/static/css/main.a8ee361d.css",
+    "main.js": "/parcial2CIU/static/js/main.4c321782.js",
+    "static/media/gato.webp": "/parcial2CIU/static/media/gato.8c15ac501f772a0ca03e.webp",
+    "static/media/logo.png": "/parcial2CIU/static/media/logo.7fabfbee8e110b32727e.png",
+    "index.html": "/parcial2CIU/index.html",
+    "main.a8ee361d.css.map": "/parcial2CIU/static/css/main.a8ee361d.css.map",
+    "main.4c321782.js.map": "/parcial2CIU/static/js/main.4c321782.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a8ee361d.css",
+    "static/js/main.4c321782.js"
+  ]
+}
